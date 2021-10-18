@@ -65,6 +65,19 @@ var updateSidebar = function(marker) {
       $('#placeInfo h2').html(d.Name);
       $('#placeInfo h3').html(d.Subtitle);
       $('#description').html(d.Description);
+      $('#test').html(
+        '<table>\
+          <tr>\
+            <th scope="row">Status IUCN</th>\
+            <td>'+d.Test+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Tipe Pohon</th>\
+            <td>'+d.Test+'</td>\
+          </tr>\
+        </table>'
+      );
+
 
       if (d.GoogleMapsLink) {
         $('#googleMaps').removeClass('dn').addClass('dt').attr('href', d.GoogleMapsLink);

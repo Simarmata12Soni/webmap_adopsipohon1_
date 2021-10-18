@@ -88,3 +88,33 @@ a:hover {
   right: 0;
   margin-right: 60px;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid rgb(200, 200, 200);
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+}
+
+td, th {
+  border: 1px solid rgb(200, 200, 200);
+  padding : 10px 20px;
+}
+
+th {
+  background-color: rgb(255, 255, 255);
+}
+
+td {
+  text-align: center;
+}
+
+tr:nth-child(even) td {
+  background-color: rgb(255, 255, 255);
+}
+
+tr:nth-child(odd) td {
+  background-color: rgb(255, 255, 255);
+}
+
