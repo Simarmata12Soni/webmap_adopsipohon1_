@@ -62,23 +62,89 @@ var updateSidebar = function(marker) {
 
     // Populate place information into the sidebar
     $('#placeInfo').animate({opacity: 0.5}, 300).promise().done(function() {
-      $('#placeInfo h2').html(d.Name);
-      $('#placeInfo h3').html(d.Subtitle);
-      $('#description').html(d.Description);
-      $('#test').html(
+      $('#placeInfo h2').html(d.kode_pohon);
+      $('#placeInfo h3').html(d.nama_lokal+' ( <i>'+d.nama_latin+ '</i> )');
+      $('#description').html(
         '<table>\
           <tr>\
             <th scope="row">Status IUCN</th>\
-            <td>'+d.Test+'</td>\
+            <td>'+d.status_iucn+'</td>\
           </tr>\
           <tr>\
-            <th scope="row">Tipe Pohon</th>\
-            <td>'+d.Test+'</td>\
+            <th scope="row">Latitude</th>\
+            <td>'+d.latitude+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Longitude</th>\
+            <td>'+d.longitude+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Latitude</th>\
+            <td>'+d.latitude+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Perhutanan Sosial</th>\
+            <td>'+d.perhutanan_sosial+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Nama Khas Wilayah</th>\
+            <td>'+d.nama_khas+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Jenis Lahan</th>\
+            <td>'+d.jenis_lahan+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Diameter</th>\
+            <td>'+d.diameter+' cm </td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Tinggi</th>\
+            <td>'+d.tinggi+' m </td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Jarak Permukiman</th>\
+            <td>'+d.jarak_permukiman+' km </td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Nama Pengadopsi</th>\
+            <td>'+d.nama_pengadopsi+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Masa Berlaku</th>\
+            <td>'+d.masa_berlaku+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Nama Surveyor</th>\
+            <td>'+d.nama_surveyor+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Waktu Survei</th>\
+            <td>'+d.waktu_survei+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Harga Adopsi</th>\
+            <td>'+d.harga_adopsi+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Stok Karbon</th>\
+            <td>'+d.stok_karbon+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Serapan Karbon</th>\
+            <td>'+d.serapan_karbon+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Penyedia Bibit</th>\
+            <td>'+d.penyedia_bibit+'</td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Metode Perhitungan Karbon</th>\
+            <td>'+d.metode_karbon+'</td>\
           </tr>\
         </table>'
       );
-
-
+    
       if (d.GoogleMapsLink) {
         $('#googleMaps').removeClass('dn').addClass('dt').attr('href', d.GoogleMapsLink);
       } else {
@@ -104,11 +170,11 @@ var updateSidebar = function(marker) {
             href: d[idx],
             'data-lightbox': 'gallery',
             'data-title': ( d[idx + 'Caption'] + ' ' + source )  || '',
-            'data-alt': d.Name,
+            'data-alt': d.kode_pohon,
             'class': i === 1 ? '' : 'dn'
           });
 
-          var img = $('<img/>', { src: d[idx], alt: d.Name, class: 'dim br1' });
+          var img = $('<img/>', { src: d[idx], alt: d.kode_pohon, class: 'dim br1' });
           $('#gallery').append( a.append(img) );
 
           if (i === 1) {
@@ -149,7 +215,7 @@ var addMarkers = function(data) {
     var d = data[i];
 
     // Create a slug for URL hash, and add to marker data
-    d['slug'] = slugify(d.Name);
+    d['slug'] = slugify(d.kode_pohon);
 
     // Add an empty group if doesn't yet exist
     if (!groups[d.Group]) { groups[d.Group] = []; }
@@ -187,7 +253,7 @@ var addMarkers = function(data) {
   }
 
   L.control.layers({}, groups, {collapsed: false}).addTo(map);
-  $('.leaflet-control-layers-overlays').prepend('<h3 class="mt0 mb1 f5 black-30">Themes</h3>');
+  $('.leaflet-control-layers-overlays'); //.prepend('<h3 class="mt0 mb1 f5 black-30">Themes</h3>');
 
   // If name in hash, activate it
   if (activeMarker) { activeMarker.fire('click') }
@@ -241,6 +307,9 @@ var addHomeButton = function() {
  */
 var initMap = function() {
 
+
+
+
   map = L.map('map', {
     center: mapCenter,
     zoom: mapZoom,
@@ -251,12 +320,76 @@ var initMap = function() {
   // Add zoom control to the bottom-right corner
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+  map.createPane('pane_OSMStandard_0');
+  map.getPane('pane_OSMStandard_0').style.zIndex = 5;
+  var layer_OSMStandard_0 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    pane: 'pane_OSMStandard_0',
+    opacity: 1.0,
+    attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap contributors, CC-BY-SA</a>',
+    minZoom: 1,
+    maxZoom: 28,
+    minNativeZoom:0,
+    maxNativeZoom:19
+  });
+  layer_OSMStandard_0;
+  map.addLayer(layer_OSMStandard_0);
 
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19
+  map.createPane('pane_GoogleTerrain_1');
+  map.getPane('pane_GoogleTerrain_1').style.zIndex = 6;
+  var layer_GoogleTerrain_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
+    pane: 'pane_GoogleTerrain_1',
+    opacity: 1.0,
+    attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+    minZoom: 1,
+    maxZoom: 28,
+    minNativeZoom: 0,
+    maxNativeZoom: 20
+  });
+  layer_GoogleTerrain_1;
+  map.addLayer(layer_GoogleTerrain_1)
+  basemaps={
+    "Peta Dasar (OSM Standard)":layer_OSMStandard_0,
+    "Peta Dasa (Google Terrain)": layer_GoogleTerrain_1
+  };
+  L.control.layers(basemaps,{},{
+    title:'Basemaps',
+    position:'bottomright',
+    collapsed:true
   }).addTo(map);
+  setBounds();
+
+  function style_bataskawasan() {
+    return {
+      opacity: 1,
+      color: 'rgba(35,35,35,1.0)',
+      dashArray: '',
+      //lineCap: 'butt',
+      //lineJoin: 'miter',
+      weight: 1.0,
+      fill: true,
+      fillOpacity: 1,
+      fillColor: 'rgba(135,116,158,0.298)',
+      interactive: true,
+    }
+  }
+  map.createPane('pane_PohonAdopsiMinastahura_4');
+  map.getPane('pane_PohonAdopsiMinastahura_4').style.zIndex = 404;
+  map.getPane('pane_PohonAdopsiMinastahura_4').style['mix-blend-mode'] = 'normal';
+  var layer_BatasKawasan = new L.geoJson(json_BatasKawasanTahuraSultanSyarifQasim_3,{
+    attribution: '',
+    interactive: true,
+    dataVar: 'json_BatasKawasanTahuraSultanSyarifQasim_3',
+    layerName: 'layer_BatasKawasanTahuraSultanSyarifQasim_3',
+    style: style_bataskawasan
+    //pane: 'pane_PohonAdopsiMinastahura_4',
+  });
+  map.addLayer(layer_BatasKawasan);
+
+  // L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  //   subdomains: 'abcd',
+  //   maxZoom: 19
+  // }).addTo(map);
 
   loadData(dataLocation);
 
