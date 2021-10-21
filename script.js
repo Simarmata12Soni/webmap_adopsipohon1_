@@ -223,7 +223,7 @@ var addMarkers = function(data) {
         icon: L.icon({
           iconUrl: pohonMuda,
           iconSize: [ iconWidth, iconHeight ],
-          iconAnchor: [ iconWidth/2, iconHeight/2 ], // middle of icon represents point center
+          iconAnchor: [ iconWidth/2, 0 ], // middle of icon represents point center
           className: 'br1',
         }),
         // Pass place data
@@ -249,8 +249,8 @@ var addMarkers = function(data) {
     groups[g].addTo(map);
   }
 
-  L.control.layers({}, groups, {collapsed: false}).addTo(map);
-  $('.leaflet-control-layers-overlays');//.prepend('<h3 class="mt0 mb1 f5 black-30">Themes</h3>');
+  L.control.layers({}, groups, {collapsed: false}).addTo(map)[0];
+  $('.leaflet-control-layers-overlays').prepend('<h3 class="mt0 mb1 f5 black-30">Themes</h3>');
 
   // If name in hash, activate it
   if (activeMarker) { activeMarker.fire('click') }
