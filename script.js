@@ -72,15 +72,11 @@ var updateSidebar = function(marker) {
           </tr>\
           <tr>\
             <th scope="row">Latitude</th>\
-            <td>'+d.latitude+'</td>\
+            <td>'+d.Latitude+'</td>\
           </tr>\
           <tr>\
             <th scope="row">Longitude</th>\
-            <td>'+d.longitude+'</td>\
-          </tr>\
-          <tr>\
-            <th scope="row">Latitude</th>\
-            <td>'+d.latitude+'</td>\
+            <td>'+d.Longitude+'</td>\
           </tr>\
           <tr>\
             <th scope="row">Perhutanan Sosial</th>\
@@ -215,7 +211,7 @@ var addMarkers = function(data) {
     var d = data[i];
 
     // Create a slug for URL hash, and add to marker data
-    d['slug'] = slugify(d.kode_pohon);
+    d['slug'] = slugify(d.id);
 
     // Add an empty group if doesn't yet exist
     if (!groups[d.Group]) { groups[d.Group] = []; }
@@ -223,9 +219,9 @@ var addMarkers = function(data) {
     // Create a new place marker
     var m = L.marker(
       [d.Latitude, d.Longitude],
-      {
+      {  
         icon: L.icon({
-          iconUrl: d.Icon,
+          iconUrl: pohonMuda,
           iconSize: [ iconWidth, iconHeight ],
           iconAnchor: [ iconWidth/2, iconHeight/2 ], // middle of icon represents point center
           className: 'br1',
@@ -234,9 +230,10 @@ var addMarkers = function(data) {
         placeInfo: d
       },
     ).on('click', function(e) {
-      map.flyTo(this._latlng, 11);
+      map.flyTo(this._latlng, 20);
       updateSidebar(this);
     });
+
 
     // Add this new place marker to an appropriate group
     groups[d.Group].push(m);
@@ -253,7 +250,7 @@ var addMarkers = function(data) {
   }
 
   L.control.layers({}, groups, {collapsed: false}).addTo(map);
-  $('.leaflet-control-layers-overlays'); //.prepend('<h3 class="mt0 mb1 f5 black-30">Themes</h3>');
+  $('.leaflet-control-layers-overlays');//.prepend('<h3 class="mt0 mb1 f5 black-30">Themes</h3>');
 
   // If name in hash, activate it
   if (activeMarker) { activeMarker.fire('click') }
@@ -309,7 +306,7 @@ var initMap = function() {
 
 
 
-
+  // Initial Map
   map = L.map('map', {
     center: mapCenter,
     zoom: mapZoom,
@@ -320,6 +317,7 @@ var initMap = function() {
   // Add zoom control to the bottom-right corner
   L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+  // Add OSM Standard Basemap  
   map.createPane('pane_OSMStandard_0');
   map.getPane('pane_OSMStandard_0').style.zIndex = 5;
   var layer_OSMStandard_0 = L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -334,6 +332,7 @@ var initMap = function() {
   layer_OSMStandard_0;
   map.addLayer(layer_OSMStandard_0);
 
+  // Add Google Terrain Basemap  
   map.createPane('pane_GoogleTerrain_1');
   map.getPane('pane_GoogleTerrain_1').style.zIndex = 6;
   var layer_GoogleTerrain_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
@@ -347,24 +346,27 @@ var initMap = function() {
   });
   layer_GoogleTerrain_1;
   map.addLayer(layer_GoogleTerrain_1)
-  basemaps={
-    "Peta Dasar (OSM Standard)":layer_OSMStandard_0,
-    "Peta Dasa (Google Terrain)": layer_GoogleTerrain_1
-  };
-  L.control.layers(basemaps,{},{
-    title:'Basemaps',
-    position:'bottomright',
-    collapsed:true
-  }).addTo(map);
-  setBounds();
+
+  //Add Google Satellite Basemaps  
+  map.createPane('pane_GoogleSatellite_2');
+  map.getPane('pane_GoogleSatellite_2').style.zIndex = 4;
+  var layer_GoogleSatellite_2 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+    pane: 'pane_GoogleSatellite_2',
+    opacity: 1.0,
+    attribution: '<a href="https://www.google.at/permissions/geoguidelines/attr-guide.html">Map data ©2015 Google</a>',
+    minZoom: 1,
+    maxZoom: 28,
+    minNativeZoom:0,
+    maxNativeZoom: 20
+  });
 
   function style_bataskawasan() {
     return {
       opacity: 1,
       color: 'rgba(35,35,35,1.0)',
       dashArray: '',
-      //lineCap: 'butt',
-      //lineJoin: 'miter',
+      lineCap: 'butt',
+      lineJoin: 'miter',
       weight: 1.0,
       fill: true,
       fillOpacity: 1,
@@ -373,7 +375,7 @@ var initMap = function() {
     }
   }
   map.createPane('pane_PohonAdopsiMinastahura_4');
-  map.getPane('pane_PohonAdopsiMinastahura_4').style.zIndex = 404;
+  map.getPane('pane_PohonAdopsiMinastahura_4').style.zIndex = 1;
   map.getPane('pane_PohonAdopsiMinastahura_4').style['mix-blend-mode'] = 'normal';
   var layer_BatasKawasan = new L.geoJson(json_BatasKawasanTahuraSultanSyarifQasim_3,{
     attribution: '',
@@ -381,9 +383,30 @@ var initMap = function() {
     dataVar: 'json_BatasKawasanTahuraSultanSyarifQasim_3',
     layerName: 'layer_BatasKawasanTahuraSultanSyarifQasim_3',
     style: style_bataskawasan
-    //pane: 'pane_PohonAdopsiMinastahura_4',
+    //pane: 'pane_PohonAdopsiMinastahura_4'
   });
   map.addLayer(layer_BatasKawasan);
+
+  //group basemaps
+  basemaps={
+    "Peta Dasar (OSM Standard)":layer_OSMStandard_0,
+    "Peta Dasar (Google Terrain)": layer_GoogleTerrain_1,
+    "Peta Dasar (Google Satellite)": layer_GoogleSatellite_2
+  };
+
+  //Batas Kawasan Minas Tahura
+  batas ={
+    "Batas Kawasan KPH Minas-Tahura": layer_BatasKawasan
+  }
+
+  // Add to map all basemaps
+  L.control.layers(basemaps, batas,{
+    title:'Basemaps',
+    position:'topright',
+    collapsed:false
+  }).addTo(map);
+  setBounds();
+
 
   // L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   //   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',

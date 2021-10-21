@@ -3,9 +3,13 @@
 const dataLocation = 'data/places.csv';
 
 // Map's initial center, and zoom level
-const mapCenter = [1.544808, 101.0875];
-const mapZoom = 9;
+const mapCenter = [0.6795, 101.345];
+const mapZoom = 12;
 
 // Marker icon height and width
-const iconHeight = 10;
-const iconWidth = 10;
+const iconHeight = 20;
+const iconWidth = 20;
+
+//Icon for pohon muda and pohon dewasa
+const pohonDewasa =  'logo/icon_pohon_dewasa_1x.png'
+const pohonMuda = 'logo/icon_pohon_muda_1x.png'
