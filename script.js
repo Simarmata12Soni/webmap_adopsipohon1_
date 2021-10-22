@@ -199,6 +199,8 @@ var updateSidebar = function(marker) {
   }
 }
 
+
+
 /*
  * Main function that generates Leaflet markers from read CSV data
  */
@@ -221,7 +223,7 @@ var addMarkers = function(data) {
       [d.Latitude, d.Longitude],
       {  
         icon: L.icon({
-          iconUrl: pohonMuda,
+          iconUrl: d.Icon,
           iconSize: [ iconWidth, iconHeight ],
           iconAnchor: [ iconWidth/2, 0 ], // middle of icon represents point center
           className: 'br1',
@@ -248,9 +250,9 @@ var addMarkers = function(data) {
     // By default, show all markers
     groups[g].addTo(map);
   }
-
-  L.control.layers({}, groups, {collapsed: false}).addTo(map)[0];
-  $('.leaflet-control-layers-overlays').prepend('<h3 class="mt0 mb1 f5 black-30">Themes</h3>');
+  
+  L.control.layers({}, groups, {collapsed: true, position: 'topright'}).addTo(map);
+  //$('.leaflet-control-layers-overlays').prepend('<h3 class="mt0 mb1 f5 black-30">Legend</h3>');
 
   // If name in hash, activate it
   if (activeMarker) { activeMarker.fire('click') }
@@ -305,7 +307,6 @@ var addHomeButton = function() {
 var initMap = function() {
 
 
-
   // Initial Map
   map = L.map('map', {
     center: mapCenter,
@@ -314,9 +315,8 @@ var initMap = function() {
     zoomControl: false,
   });
 
-  // Add zoom control to the bottom-right corner
-  L.control.zoom({ position: 'bottomright' }).addTo(map);
 
+  // Add Basemaps
   // Add OSM Standard Basemap  
   map.createPane('pane_OSMStandard_0');
   map.getPane('pane_OSMStandard_0').style.zIndex = 5;
@@ -329,8 +329,6 @@ var initMap = function() {
     minNativeZoom:0,
     maxNativeZoom:19
   });
-  layer_OSMStandard_0;
-  map.addLayer(layer_OSMStandard_0);
 
   // Add Google Terrain Basemap  
   map.createPane('pane_GoogleTerrain_1');
@@ -344,8 +342,6 @@ var initMap = function() {
     minNativeZoom: 0,
     maxNativeZoom: 20
   });
-  layer_GoogleTerrain_1;
-  map.addLayer(layer_GoogleTerrain_1)
 
   //Add Google Satellite Basemaps  
   map.createPane('pane_GoogleSatellite_2');
@@ -359,6 +355,8 @@ var initMap = function() {
     minNativeZoom:0,
     maxNativeZoom: 20
   });
+  layer_GoogleSatellite_2;
+  map.addLayer(layer_GoogleSatellite_2)
 
   function style_bataskawasan() {
     return {
@@ -387,22 +385,18 @@ var initMap = function() {
   });
   map.addLayer(layer_BatasKawasan);
 
+
   //group basemaps
-  basemaps={
+  basemaps= {
     "Peta Dasar (OSM Standard)":layer_OSMStandard_0,
     "Peta Dasar (Google Terrain)": layer_GoogleTerrain_1,
     "Peta Dasar (Google Satellite)": layer_GoogleSatellite_2
   };
 
-  //Batas Kawasan Minas Tahura
-  batas ={
-    "Batas Kawasan KPH Minas-Tahura": layer_BatasKawasan
-  }
-
   // Add to map all basemaps
-  L.control.layers(basemaps, batas,{
-    title:'Basemaps',
-    position:'topright',
+  L.control.layers(
+    basemaps,{} ,{
+    position:'bottomright',
     collapsed:false
   }).addTo(map);
   setBounds();
@@ -424,7 +418,12 @@ var initMap = function() {
     for interactive maps">Leaflet</a>');
 
   // Add custom `home` control
-  addHomeButton();
+  addHomeButton({
+    position:'bottomright'
+  });
+
+  // Add zoom control to the bottom-right corner
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
 
   $('#closeButton').on('click', resetView);
 }

@@ -110,11 +110,11 @@ td {
   text-align: left;
 }
 
-tr:nth-child(even) td {
+/* tr:nth-child(even) td {
   background-color: rgb(219, 195, 195);
 }
 
 tr:nth-child(odd) td {
   background-color: rgb(255, 255, 255);
-}
+} */
 
