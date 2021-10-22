@@ -3,7 +3,7 @@ Beberapa hal yang belum lengkap:
 1. Leaflet search button,
 2. Icon pada legend,
 
-![Preview]()
+![Preview](preview.png)
 
 
 Link Map: https://simarmata12soni.github.io/webmap_adopsipohon1_/
