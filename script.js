@@ -80,11 +80,11 @@ var updateSidebar = function(marker) {
           </tr>\
           <tr>\
             <th scope="row">Perhutanan Sosial</th>\
-            <td>'+d.perhutanan_sosial+'</td>\
+            <td>'+d.unit_PS+'</td>\
           </tr>\
           <tr>\
             <th scope="row">Nama Khas Wilayah</th>\
-            <td>'+d.nama_khas+'</td>\
+            <td>'+d.nama_khas_wilayah+'</td>\
           </tr>\
           <tr>\
             <th scope="row">Jenis Lahan</th>\
@@ -101,6 +101,10 @@ var updateSidebar = function(marker) {
           <tr>\
             <th scope="row">Jarak Permukiman</th>\
             <td>'+d.jarak_permukiman+' km </td>\
+          </tr>\
+          <tr>\
+            <th scope="row">Status Adopsi</th>\
+            <td>'+d.status_adopsi+'</td>\
           </tr>\
           <tr>\
             <th scope="row">Nama Pengadopsi</th>\
@@ -120,15 +124,11 @@ var updateSidebar = function(marker) {
           </tr>\
           <tr>\
             <th scope="row">Harga Adopsi</th>\
-            <td>'+d.harga_adopsi+'</td>\
-          </tr>\
-          <tr>\
-            <th scope="row">Stok Karbon</th>\
-            <td>'+d.stok_karbon+'</td>\
+            <td> Rp '+d.harga_adopsi+'</td>\
           </tr>\
           <tr>\
             <th scope="row">Serapan Karbon</th>\
-            <td>'+d.serapan_karbon+'</td>\
+            <td>'+d.serapan_karbon+' Kg </td>\
           </tr>\
           <tr>\
             <th scope="row">Penyedia Bibit</th>\
@@ -141,8 +141,8 @@ var updateSidebar = function(marker) {
         </table>'
       );
     
-      if (d.GoogleMapsLink) {
-        $('#googleMaps').removeClass('dn').addClass('dt').attr('href', d.GoogleMapsLink);
+      if (d.chart_link) {
+        $('#googleMaps').removeClass('dn').addClass('dt').attr('href', d.chart_link);
       } else {
         $('#googleMaps').addClass('dn').removeClass('dt');
       }
@@ -156,16 +156,16 @@ var updateSidebar = function(marker) {
 
         if (d[idx]) {
 
-          var source = "<em class='normal'>" + d[idx + 'Source'] + '</em>';
+          // var source = "<em class='normal'>" + d[idx + 'Source'] + '</em>';
 
-          if (source && d[idx + 'SourceLink']) {
-            source = "<a href='" + d[idx + 'SourceLink'] + "' target='_blank'>" + source + "</a>";
-          }
+          // if (source && d[idx + 'SourceLink']) {
+          //   source = "<a href='" + d[idx + 'SourceLink'] + "' target='_blank'>" + source + "</a>";
+          // }
 
           var a = $('<a/>', {
             href: d[idx],
             'data-lightbox': 'gallery',
-            'data-title': ( d[idx + 'Caption'] + ' ' + source )  || '',
+            //'data-title': ( d[idx + 'Caption'] + ' ' + source )  || '',
             'data-alt': d.kode_pohon,
             'class': i === 1 ? '' : 'dn'
           });
