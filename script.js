@@ -151,7 +151,7 @@ var updateSidebar = function(marker) {
       $('#galleryIcon').hide();
 
       // Load up to 5 images
-      for (var i = 1; i <= 5; i++) {
+      for (var i = 1; i <= 4; i++) {
         var idx = 'Image' + i;
 
         if (d[idx]) {
